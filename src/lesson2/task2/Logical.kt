@@ -29,12 +29,8 @@ fun isNumberHappy(number: Int): Boolean =
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    return when {
-        (x1 == x2) or (y1 == y2) or (abs(x2 - x1) == abs(y2 - y1)) -> true
-        else -> false
-    }
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    x1 == x2 || y1 == y2 || abs(x2 - x1) == abs(y2 - y1)
 
 
 /**
@@ -76,13 +72,10 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    return when {
-        ((a <= r) and (b <= s)) or ((a <= s) and (b <= r)) -> true
-        ((a <= r) and (c <= s)) or ((a <= s) and (c <= r)) -> true
-        ((b <= r) and (c <= s)) or ((b <= s) and (c <= r)) -> true
-        else -> false
-    }
-}
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = (a <= r) and (b <= s)
+        || (a <= s) and (b <= r) || (a <= r) and (c <= s)
+        || (a <= s) and (c <= r) || (b <= r) and (c <= s)
+        || (b <= s) and (c <= r)
+
 
 
