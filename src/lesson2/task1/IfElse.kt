@@ -3,6 +3,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -68,15 +70,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when {
-        age / 10 == 11 -> "$age лет"
-        age / 10 == 1 -> "$age лет"
-        age % 10 == 1 -> "$age год"
-        age % 10 in 2..4 -> "$age года"
-        else -> "$age лет"
-    }
+fun ageDescription(age: Int): String = when {
+    age / 10 == 11 -> "$age лет"
+    age / 10 == 1 -> "$age лет"
+    age % 10 == 1 -> "$age год"
+    age % 10 in 2..4 -> "$age года"
+    else -> "$age лет"
 }
+
 
 /**
  * Простая (2 балла)
@@ -104,13 +105,11 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return when {
-        (kingX == rookX1 || kingY == rookY1) and (kingX == rookX2 || kingY == rookY2) -> 3
-        kingX == rookX1 || kingY == rookY1 -> 1
-        kingX == rookX2 || kingY == rookY2 -> 2
-        else -> 0
-    }
+): Int = when {
+    (kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2) -> 3
+    kingX == rookX1 || kingY == rookY1 -> 1
+    kingX == rookX2 || kingY == rookY2 -> 2
+    else -> 0
 }
 
 /**
@@ -127,7 +126,12 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int = when {
+    (kingX == rookX || kingY == rookY) && (abs(bishopX - kingX) == abs(bishopY - kingY)) -> 3
+    kingX == rookX || kingY == rookY -> 1
+    abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
+    else -> 0
+}
 
 /**
  * Простая (2 балла)
@@ -138,26 +142,14 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val x = sqr(b) + sqr(c)
+    val y = sqr(a) + sqr(c)
+    val z = sqr(b) + sqr(a)
     return when {
-        (a + b > c) and (a + c > b) and (b + c > a) -> return when {
-            (a >= b) and (a >= c) -> return when {
-                b * b + c * c == a * a -> 1
-                b * b + c * c > a * a -> 0
-                b * b + c * c < a * a -> 2
-                else -> -1
-            }
-            (b >= a) and (b >= c) -> return when {
-                a * a + c * c == b * b -> 1
-                a * a + c * c > b * b -> 0
-                a * a + c * c < b * b -> 2
-                else -> -1
-            }
-            (c >= a) and (c >= b) -> return when {
-                b * b + a * a == c * c -> 1
-                b * b + a * a > c * c -> 0
-                b * b + a * a < c * c -> 2
-                else -> -1
-            }
+        (a + b > c) && (a + c > b) && (b + c > a) -> when {
+            x == sqr(a) || y == sqr(b) || z == sqr(c) -> 1
+            a >= c && a >= b && x > sqr(a) || b >= a && b >= c && y > sqr(b) || c >= a && c >= b && z > sqr(c) -> 0
+            a >= b && x < sqr(a) || b >= a && y < sqr(b) || c >= a && z < sqr(c) -> 2
             else -> -1
         }
         else -> -1

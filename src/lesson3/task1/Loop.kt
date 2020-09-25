@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -131,7 +132,15 @@ fun maxDivisor(n: Int): Int {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var k = 0
+    var l = x
+    while (l != 1) {
+        if (l % 2 == 0) l /= 2 else l = 3 * l + 1
+        k++
+    }
+    return k
+}
 
 /**
  * Средняя (3 балла)
@@ -176,7 +185,15 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var k = 0
+    var l = 0
+    while (sqr(k) < m) {
+        k++
+        if ((sqr(k) <= n) and (sqr(k) >= m)) l = 1
+    }
+    return l == 1
+}
 
 /**
  * Средняя (3 балла)
