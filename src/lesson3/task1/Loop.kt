@@ -189,13 +189,15 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var k = 0
     var l = 0
-    while (sqr(k) < m) {
-        k++
-        if ((sqr(k) <= n) and (sqr(k) >= m)) l = 1
+    if ((m == n) && (sqr(k) == m)) l = 1
+    else {
+        while ((l != 1) && (k < 46341)) {
+            if ((sqr(k) <= n) && (sqr(k) >= m)) l = 1
+            k++
+        }
     }
     return l == 1
 }
-
 /**
  * Средняя (3 балла)
  *
