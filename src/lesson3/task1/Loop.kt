@@ -174,10 +174,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
         if ((m % k == 0) && (n % k == 0) || (m % n == 0) || (n % m == 0)) l++
         if ((m <= 2) || (n <= 2)) l = 0
     }
-    return when (l) {
-        0 -> true
-        else -> false
-    }
+    return l == 0
 }
 /**
  * Средняя (3 балла)
