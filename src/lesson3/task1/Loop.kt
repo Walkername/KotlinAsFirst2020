@@ -171,7 +171,8 @@ fun lcm(m: Int, n: Int): Int {
 fun isCoPrime(m: Int, n: Int): Boolean {
     var l = 0
     for (k in 2..10) {
-        if ((m % k == 0) && (n % k == 0) && (n > 2) && (m > 2) || (m % n == 0) || (n % m == 0)) l++
+        if ((m % k == 0) && (n % k == 0) || (m % n == 0) || (n % m == 0)) l++
+        if ((m <= 2) && (n <= 2)) l = 0
     }
     return when (l) {
         0 -> true
