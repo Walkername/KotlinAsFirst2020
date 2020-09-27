@@ -176,6 +176,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     }
     return l == 0
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -195,6 +196,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     }
     return l == 1
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -230,7 +232,32 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var x = n / 10
+    var k = 1
+    var l = 1
+    var a = 0
+    var b = 0
+    var z = 0
+    while (x > 0) {
+        x /= 10
+        k *= 10
+        l++
+    }
+    x = n
+    if (l != 1) {
+        l /= 2
+        for (i in 1..l) {
+            a += x / k
+            b += x % 10
+            k /= 10
+            x = x / 10 % k
+            k /= 10
+            z = if (a == b) 1 else 0
+        }
+    } else z = 1
+    return z == 1
+}
 
 /**
  * Средняя (3 балла)
@@ -240,7 +267,17 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var x = n
+    var m = x % 10
+    var s = m
+    while ((m == s) && (x > 0)) {
+        s = m
+        m = x % 10
+        x /= 10
+    }
+    return s != m
+}
 
 /**
  * Средняя (4 балла)
