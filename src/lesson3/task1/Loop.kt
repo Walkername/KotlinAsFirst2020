@@ -228,6 +228,7 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean = n == revert(n)
+
 /**
  * Средняя (3 балла)
  *
@@ -239,7 +240,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var x = n
     val m = x % 10
-    var s = m
+    var s = n
     while (m == s && x > 0) {
         s = x % 10
         x /= 10

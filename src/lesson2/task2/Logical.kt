@@ -80,6 +80,3 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
             || a <= s && c <= r
             || b <= r && c <= s
             || b <= s && c <= r
-
-
-
