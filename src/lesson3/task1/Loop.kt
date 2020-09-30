@@ -240,7 +240,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var x = n
     val m = x % 10
-    var s = n
+    var s = m
     while (m == s && x > 0) {
         s = x % 10
         x /= 10
