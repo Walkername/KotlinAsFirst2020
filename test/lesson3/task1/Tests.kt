@@ -149,6 +149,9 @@ class Tests {
     @Test
     @Tag("3")
     fun isCoPrime() {
+        assertTrue(isCoPrime(1, 4))
+        assertTrue(isCoPrime(1, 3))
+        assertTrue(isCoPrime(2, 2))
         assertTrue(isCoPrime(25, 49))
         assertFalse(isCoPrime(6, 8))
         assertTrue(isCoPrime(17, 97))
@@ -160,6 +163,7 @@ class Tests {
     @Test
     @Tag("3")
     fun squareBetweenExists() {
+        assertTrue(squareBetweenExists(0, 0))
         assertTrue(squareBetweenExists(1, 1))
         assertTrue(squareBetweenExists(21, 28))
         assertTrue(squareBetweenExists(36, 48))
@@ -230,9 +234,12 @@ class Tests {
     @Test
     @Tag("4")
     fun squareSequenceDigit() {
-        assertEquals(1, squareSequenceDigit(1))
-        assertEquals(4, squareSequenceDigit(2))
+
+
+        assertEquals(6, squareSequenceDigit(5))
+        assertEquals(2, squareSequenceDigit(6))
         assertEquals(5, squareSequenceDigit(7))
+        assertEquals(3, squareSequenceDigit(8))
         assertEquals(6, squareSequenceDigit(12))
         assertEquals(0, squareSequenceDigit(17))
         assertEquals(9, squareSequenceDigit(27))

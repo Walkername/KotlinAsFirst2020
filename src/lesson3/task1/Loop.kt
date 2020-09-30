@@ -171,8 +171,8 @@ fun lcm(m: Int, n: Int): Int {
 fun isCoPrime(m: Int, n: Int): Boolean {
     var l = 0
     for (k in 2..10) {
-        if ((m % k == 0) && (n % k == 0) || (m % n == 0) || (n % m == 0)) l++
-        if ((m <= 2) || (n <= 2)) l = 0
+        if (m % k == 0 && n % k == 0 || m % n == 0 || n % m == 0) l++
+        if (m <= 2 || n <= 2) l = 0
     }
     return l == 0
 }
@@ -187,10 +187,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var k = 0
     var l = 0
-    if ((m == n) && (sqr(k) == m)) l = 1
+    if (m == n && sqr(k) == m) return true
     else {
-        while ((l != 1) && (k < 46341)) {
-            if ((sqr(k) <= n) && (sqr(k) >= m)) l = 1
+        while (l != 1 && k < sqrt(Int.MAX_VALUE.toDouble())) {
+            if (sqr(k) in m..n) l = 1
             k++
         }
     }
@@ -205,16 +205,11 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var x = n / 10
+    var x = n
     var k = 1
-    var l = 0
     var a = 0
-    while (x > 0) {
-        x /= 10
-        k *= 10
-        l++
-    }
-    x = n
+    val l = digitNumber(n)
+    for (i in 1 until l) k *= 10
     for (i in 0..l) {
         a += x % 10 * k
         x /= 10
@@ -232,33 +227,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var x = n / 10
-    var k = 1
-    var l = 1
-    var a = 0
-    var b = 0
-    var z = 0
-    while (x > 0) {
-        x /= 10
-        k *= 10
-        l++
-    }
-    x = n
-    if (l != 1) {
-        l /= 2
-        for (i in 1..l) {
-            a += x / k
-            b += x % 10
-            k /= 10
-            x = x / 10 % k
-            k /= 10
-            z = if (a == b) 1 else 0
-        }
-    } else z = 1
-    return z == 1
-}
-
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 /**
  * Средняя (3 балла)
  *
@@ -269,11 +238,10 @@ fun isPalindrome(n: Int): Boolean {
  */
 fun hasDifferentDigits(n: Int): Boolean {
     var x = n
-    var m = x % 10
+    val m = x % 10
     var s = m
-    while ((m == s) && (x > 0)) {
-        s = m
-        m = x % 10
+    while (m == s && x > 0) {
+        s = x % 10
         x /= 10
     }
     return s != m

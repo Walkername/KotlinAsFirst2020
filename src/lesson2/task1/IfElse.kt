@@ -127,7 +127,7 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int = when {
-    (kingX == rookX || kingY == rookY) && (abs(bishopX - kingX) == abs(bishopY - kingY)) -> 3
+    (kingX == rookX || kingY == rookY) && abs(bishopX - kingX) == abs(bishopY - kingY) -> 3
     kingX == rookX || kingY == rookY -> 1
     abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
     else -> 0
@@ -146,12 +146,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val y = sqr(a) + sqr(c)
     val z = sqr(b) + sqr(a)
     return when {
-        (a + b > c) && (a + c > b) && (b + c > a) -> when {
-            x == sqr(a) || y == sqr(b) || z == sqr(c) -> 1
-            a >= c && a >= b && x > sqr(a) || b >= a && b >= c && y > sqr(b) || c >= a && c >= b && z > sqr(c) -> 0
-            a >= b && x < sqr(a) || b >= a && y < sqr(b) || c >= a && z < sqr(c) -> 2
-            else -> -1
-        }
+        a + b <= c || a + c <= b || b + c <= a -> -1
+        x == sqr(a) || y == sqr(b) || z == sqr(c) -> 1
+        a >= c && a >= b && x > sqr(a) || b >= a && b >= c && y > sqr(b) || c >= a && c >= b && z > sqr(c) -> 0
+        a >= b && x < sqr(a) || b >= a && y < sqr(b) || c >= a && z < sqr(c) -> 2
         else -> -1
     }
 }
@@ -165,14 +163,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-    (b > c) and (a < c) and (d > b) -> b - c
+    (b > c) && (a < c) && (d > b) -> b - c
     c > b -> -1
     d < a -> -1
     b == c -> 0
     a == d -> 0
-    (c >= a) and (c <= b) and (d <= a) -> c - a
-    (c <= a) and (d >= b) -> b - a
-    (d >= a) and (d <= b) and (c <= a) -> d - a
+    (c >= a) && (c <= b) && (d <= a) -> c - a
+    (c <= a) && (d >= b) -> b - a
+    (d >= a) && (d <= b) && (c <= a) -> d - a
     else -> d - c
 }
 
