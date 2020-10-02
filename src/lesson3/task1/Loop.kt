@@ -90,7 +90,19 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var x = 1
+    var z = 0
+    var y = x
+    var l = 1
+    while (l <= n) {
+        x = z + y
+        y = z
+        z = x
+        l++
+    }
+    return x
+}
 
 /**
  * Простая (2 балла)
@@ -99,6 +111,7 @@ fun fib(n: Int): Int = TODO()
  */
 fun minDivisor(n: Int): Int {
     var m = 2
+    if (isPrime(n)) return n
     while (n % m != 0) m++
     return m
 }
@@ -110,6 +123,7 @@ fun minDivisor(n: Int): Int {
  */
 fun maxDivisor(n: Int): Int {
     var m = n / 2
+    if (isPrime(n)) return 1
     while (n % m != 0) {
         m--
     }
@@ -151,8 +165,8 @@ fun collatzSteps(x: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     val l = if (m > n) m else if (n > m) n else m
     var k = when {
-        (m % n != 0) and (m > n) -> m
-        (n % m != 0) and (n > m) -> n
+        (m % n != 0) && (m > n) -> m
+        (n % m != 0) && (n > m) -> n
         else -> n
     }
     while ((k % n != 0) || (k % m != 0)) {
@@ -186,15 +200,12 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var k = 0
-    var l = 0
     if (m == n && sqr(k) == m) return true
-    else {
-        while (l != 1 && k < sqrt(Int.MAX_VALUE.toDouble())) {
-            if (sqr(k) in m..n) l = 1
-            k++
-        }
+    while (k < sqrt(Int.MAX_VALUE.toDouble())) {
+        if (sqr(k) in m..n) return true
+        k++
     }
-    return l == 1
+    return false
 }
 
 /**
