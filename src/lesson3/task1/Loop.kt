@@ -303,15 +303,14 @@ fun squareSequenceDigit(n: Int): Int {
         m = sqr(i)
         l -= digitNumber(m)
         i++
-        if (l >= 0) j = l
+        j = abs(l)
     }
-    l = digitNumber(m) - 2
     x = m
     if (j == 0) {
         m %= 10
         return m
     }
-    for (i in 0..j + l) {
+    for (i in 0..j) {
         m = x % 10
         x /= 10
     }
@@ -339,15 +338,14 @@ fun fibSequenceDigit(n: Int): Int {
         y = z
         z = m
         l -= digitNumber(m)
-        if (l >= 0) j = l
+        j = abs(l)
     }
-    l = digitNumber(m) - 2
     x = m
     if (j == 0) {
         m %= 10
         return m
     }
-    for (i in 0..j + l) {
+    for (i in 0..j) {
         m = x % 10
         x /= 10
     }
