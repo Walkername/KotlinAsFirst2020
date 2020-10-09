@@ -4,6 +4,7 @@ package lesson3.task1
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -163,7 +164,7 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    val l = if (m > n) m else if (n > m) n else m
+    val l = if (m >= n) m else n
     var k = when {
         (m % n != 0) && (m > n) -> m
         (n % m != 0) && (n > m) -> n
@@ -184,7 +185,7 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
     var l = 0
-    var s = if (m >= n) n else m
+    val s = if (m >= n) n else m
     for (k in 2..s) {
         if (isPrime(m) && isPrime(n) && m % n != 0 && n % m != 0) return true
         if (m % k == 0 && n % k == 0 || m % n == 0 || n % m == 0) l++
@@ -220,16 +221,16 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var x = n
-    var k = 1
-    var a = 0
+    var k = 10.0
+    var a = 0.0
     val l = digitNumber(n)
-    for (i in 1 until l) k *= 10
+    k = k.pow(l - 1)
     for (i in 0..l) {
         a += x % 10 * k
         x /= 10
         k /= 10
     }
-    return a
+    return a.toInt()
 }
 
 /**
@@ -294,27 +295,22 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var l = n
+    var digNumb = n
     var x = 1
-    var m = 0
-    var i = 1
+    var digitn = 0
     var j = 0
-    while (l > 0) {
-        m = sqr(i)
-        l -= digitNumber(m)
-        i++
-        j = abs(l)
+    while (digNumb > 0) {
+        digitn = sqr(x)
+        digNumb -= digitNumber(digitn)
+        x++
+        j = abs(digNumb)
     }
-    x = m
-    if (j == 0) {
-        m %= 10
-        return m
-    }
+    x = digitn
     for (i in 0..j) {
-        m = x % 10
+        digitn = x % 10
         x /= 10
     }
-    return m
+    return digitn
 }
 
 /**
@@ -327,27 +323,23 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var l = n
-    var x = 0
-    var m = 1
+    var digNumb = n
+    var x: Int
+    var digitn = 1
     var j = 0
     var z = 0
     var y = 1
-    while (l > 0) {
-        m = z + y
+    while (digNumb > 0) {
+        digitn = z + y
         y = z
-        z = m
-        l -= digitNumber(m)
-        j = abs(l)
+        z = digitn
+        digNumb -= digitNumber(digitn)
+        j = abs(digNumb)
     }
-    x = m
-    if (j == 0) {
-        m %= 10
-        return m
-    }
+    x = digitn
     for (i in 0..j) {
-        m = x % 10
+        digitn = x % 10
         x /= 10
     }
-    return m
+    return digitn
 }
