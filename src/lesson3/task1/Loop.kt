@@ -221,16 +221,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var x = n
-    var k = 10.0
-    var a = 0.0
+    var a = 0
     val l = digitNumber(n)
-    k = k.pow(l - 1)
+    var k = (10.0).pow(l - 1).toInt()
     for (i in 0..l) {
         a += x % 10 * k
         x /= 10
         k /= 10
     }
-    return a.toInt()
+    return a
 }
 
 /**
@@ -243,7 +242,6 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean = n == revert(n)
-
 /**
  * Средняя (3 балла)
  *
@@ -298,15 +296,13 @@ fun squareSequenceDigit(n: Int): Int {
     var digNumb = n
     var x = 1
     var digitn = 0
-    var j = 0
     while (digNumb > 0) {
         digitn = sqr(x)
         digNumb -= digitNumber(digitn)
         x++
-        j = abs(digNumb)
     }
     x = digitn
-    for (i in 0..j) {
+    for (i in 0..abs(digNumb)) {
         digitn = x % 10
         x /= 10
     }
@@ -326,7 +322,6 @@ fun fibSequenceDigit(n: Int): Int {
     var digNumb = n
     var x: Int
     var digitn = 1
-    var j = 0
     var z = 0
     var y = 1
     while (digNumb > 0) {
@@ -334,10 +329,9 @@ fun fibSequenceDigit(n: Int): Int {
         y = z
         z = digitn
         digNumb -= digitNumber(digitn)
-        j = abs(digNumb)
     }
     x = digitn
-    for (i in 0..j) {
+    for (i in 0..abs(digNumb)) {
         digitn = x % 10
         x /= 10
     }
