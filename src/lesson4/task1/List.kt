@@ -4,6 +4,10 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.isPrime
+import lesson3.task1.maxDivisor
+import lesson3.task1.minDivisor
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -177,7 +181,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
     var sum = 0
     if (a.isEmpty()) return 0
     for (i in 0 until a.size) {
-        sum += (a[i] * b[i])
+        sum += a[i] * b[i]
     }
     return sum
 }
@@ -190,7 +194,14 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    if (p.isEmpty()) return 0
+    var m = p[0]
+    for (i in 1 until p.size) {
+        m += p[i] * x.toDouble().pow(i).toInt()
+    }
+    return m
+}
 
 /**
  * Средняя (3 балла)
@@ -202,7 +213,16 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    var k = 1
+    if (list.isNotEmpty()) {
+        for (i in 1 until list.size) {
+            k += i + 1
+            list[i] = k
+        }
+    }
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -211,7 +231,23 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val p = mutableListOf<Int>()
+    var m = n
+    if (isPrime(n)) return listOf(n)
+    while (!isPrime(m)) {
+        p.add(maxDivisor(m))
+        p.add(minDivisor(m))
+        m = maxDivisor(m)
+    }
+    val y = mutableListOf<Int>()
+    for (i in p) {
+        if (isPrime(i)) {
+            y.add(i)
+        }
+    }
+    return y.sorted()
+}
 
 /**
  * Сложная (4 балла)
