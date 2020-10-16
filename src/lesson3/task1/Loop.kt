@@ -125,9 +125,7 @@ fun minDivisor(n: Int): Int {
 fun maxDivisor(n: Int): Int {
     var m = n / 2
     if (isPrime(n)) return 1
-    while (n % m != 0) {
-        m--
-    }
+    while (n % m != 0) m--
     return m
 }
 
@@ -164,16 +162,12 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    val l = if (m >= n) m else n
-    var k = when {
-        (m % n != 0) && (m > n) -> m
-        (n % m != 0) && (n > m) -> n
-        else -> n
-    }
-    while ((k % n != 0) || (k % m != 0)) {
-        k += l
-    }
-    return k
+    var l = m
+    var k = n
+    do {
+        if (l > k) l %= k else k %= l
+    } while (l != 0 && k != 0)
+    return (m * n) / (l + k)
 }
 
 /**
@@ -241,7 +235,9 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
+
 fun isPalindrome(n: Int): Boolean = n == revert(n)
+
 /**
  * Средняя (3 балла)
  *
