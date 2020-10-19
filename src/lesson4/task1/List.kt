@@ -4,10 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import lesson3.task1.isPrime
-import lesson3.task1.maxDivisor
-import lesson3.task1.minDivisor
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -127,11 +123,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var sum = 0.0
-    if (v.isEmpty()) return 0.0
-    for (i in 0 until v.size) {
-        val element = v[i]
-        sum += sqr(element)
-    }
+    for (element in v) sum += sqr(element)
     return sqrt(sum)
 }
 
@@ -141,15 +133,10 @@ fun abs(v: List<Double>): Double {
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
 fun mean(list: List<Double>): Double {
-    var k = 0
-    var sum = 0.0
     if (list.isEmpty()) return 0.0
-    for (i in 0 until list.size) {
-        val element = list[i]
-        k++
-        sum += element
-    }
-    return sum / k
+    var sum = 0.0
+    for (element in list) sum += element
+    return sum / list.size
 }
 
 /**
@@ -162,10 +149,8 @@ fun mean(list: List<Double>): Double {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val mlist = mean(list)
-    if (list.isNotEmpty()) {
-        for (i in 0 until list.size) {
-            list[i] -= mlist
-        }
+    for (i in list.indices) {
+        list[i] -= mlist
     }
     return list
 }
@@ -179,10 +164,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var sum = 0
-    if (a.isEmpty()) return 0
-    for (i in 0 until a.size) {
-        sum += a[i] * b[i]
-    }
+    for (i in a.indices) sum += a[i] * b[i]
     return sum
 }
 
@@ -195,10 +177,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
-    var m = p[0]
-    for (i in 1 until p.size) {
-        m += p[i] * x.toDouble().pow(i).toInt()
+    var m = 0
+    var y = 1
+    for (element in p) {
+        m += element * x / x * y
+        y *= x
     }
     return m
 }
@@ -215,11 +198,9 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     var k = 1
-    if (list.isNotEmpty()) {
-        for (i in 1 until list.size) {
-            k += i + 1
-            list[i] = k
-        }
+    for (i in 1 until list.size) {
+        k += list[i]
+        list[i] = k
     }
     return list
 }
@@ -234,19 +215,14 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun factorize(n: Int): List<Int> {
     val p = mutableListOf<Int>()
     var m = n
-    if (isPrime(n)) return listOf(n)
-    while (!isPrime(m)) {
-        p.add(maxDivisor(m))
-        p.add(minDivisor(m))
-        m = maxDivisor(m)
+    var x = 2
+    while (m != 1) {
+        if (m % x == 0) {
+            p.add(x)
+            m /= x
+        } else x++
     }
-    val y = mutableListOf<Int>()
-    for (i in p) {
-        if (isPrime(i)) {
-            y.add(i)
-        }
-    }
-    return y.sorted()
+    return p
 }
 
 /**
