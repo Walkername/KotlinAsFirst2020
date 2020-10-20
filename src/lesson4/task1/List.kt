@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.isPrime
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -177,6 +178,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
+    if (x == 0) return p[0]
     var m = 0
     var y = 1
     for (element in p) {
@@ -233,7 +235,17 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    if (isPrime(n)) return "$n"
+    val list = factorize(n)
+    var m = list[0]
+    var p = "$m"
+    for (i in 1 until list.size) {
+        m = list[i]
+        p += "*$m"
+    }
+    return p
+}
 
 /**
  * Средняя (3 балла)
@@ -242,7 +254,15 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    val list = mutableListOf<Int>()
+    var m = n
+    while (m > 0) {
+        list.add(0, m % base)
+        m /= base
+    }
+    return list
+}
 
 /**
  * Сложная (4 балла)
