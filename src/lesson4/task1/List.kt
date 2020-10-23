@@ -4,7 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import lesson3.task1.isPrime
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -178,6 +177,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
+    if (p.isEmpty()) return 0
     if (x == 0) return p[0]
     var m = 0
     var y = 1
@@ -199,9 +199,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
-    var k = list[0]
-    for (i in 1 until list.size) {
+    var k = 0
+    for (i in 0 until list.size) {
         k += list[i]
         list[i] = k
     }
@@ -236,13 +235,10 @@ fun factorize(n: Int): List<Int> {
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
 fun factorizeToString(n: Int): String {
-    if (isPrime(n)) return "$n"
     val list = factorize(n)
-    var m = list[0]
-    var p = "$m"
+    var p = "${list[0]}"
     for (i in 1 until list.size) {
-        m = list[i]
-        p += "*$m"
+        p += "*${list[i]}"
     }
     return p
 }
@@ -276,7 +272,21 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val alphabet = mutableListOf<Char>()
+    for (i in 'a'..'z') {
+        alphabet.add(i)
+    }
+    val list = convert(n, base).toMutableList()
+    var listcts = ""
+    for (i in 0 until list.size) {
+        listcts += if (list[i] > 9) {
+            "${alphabet[list[i] - 10]}"
+        } else
+            "${list[i]}"
+    }
+    return listcts
+}
 
 /**
  * Средняя (3 балла)
