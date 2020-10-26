@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -281,9 +282,9 @@ fun convertToString(n: Int, base: Int): String {
     var listcts = ""
     for (i in 0 until list.size) {
         listcts += if (list[i] > 9) {
-            "${alphabet[list[i] - 10]}"
+            alphabet[list[i] - 10]
         } else
-            "${list[i]}"
+            list[i]
     }
     return listcts
 }
@@ -295,7 +296,16 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var digit = 0
+    var bs = digits.size - 1
+    val be = base.toDouble()
+    for (i in digits.indices) {
+        digit += digits[i] * be.pow(bs).toInt()
+        bs -= 1
+    }
+    return digit
+}
 
 /**
  * Сложная (4 балла)
@@ -309,7 +319,22 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val numalp = mutableListOf<Char>()
+    for (i in '0'..'9') {
+        numalp.add(i)
+    }
+    for (i in 'a'..'z') {
+        numalp.add(i)
+    }
+    val list = str.toMutableList()
+    val lst = mutableListOf<Int>()
+    for (i in list.indices) {
+        lst.add(numalp.indexOf(list[i]))
+    }
+    return decimal(lst, base)
+}
+
 
 /**
  * Сложная (5 баллов)
