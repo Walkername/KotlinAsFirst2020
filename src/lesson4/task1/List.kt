@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.digitNumber
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -298,11 +299,11 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var digit = 0
-    var bs = digits.size - 1
-    val be = base.toDouble()
+    val bs = digits.size - 1
+    var rank = base.toDouble().pow(bs).toInt()
     for (i in digits.indices) {
-        digit += digits[i] * be.pow(bs).toInt()
-        bs -= 1
+        digit += digits[i] * rank
+        rank /= base
     }
     return digit
 }
@@ -330,7 +331,9 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = str.toMutableList()
     val lst = mutableListOf<Int>()
     for (i in list.indices) {
-        lst.add(numalp.indexOf(list[i]))
+        for (s in numalp.indices) {
+            if (list[i] == numalp[s]) lst.add(s)
+        }
     }
     return decimal(lst, base)
 }
@@ -344,7 +347,31 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val roman = listOf(
+        "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XX",
+        "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C", "CC", "CCC", "CD", "D",
+        "DC", "DCC", "DCCC", "CM", "M", "MM", "MMM"
+    )
+    val romdig = mutableListOf<Int>()
+    for (i in 1..9) romdig.add(i)
+    for (i in 10..90 step 10) romdig.add(i)
+    for (i in 100..900 step 100) romdig.add(i)
+    for (i in 1000..3000 step 1000) romdig.add(i)
+    val list = mutableListOf<Int>()
+    var str = ""
+    var k = 1
+    var m = n
+    while (m != 0) {
+        if (m % 10 != 0) list.add(0, m % 10 * k)
+        k *= 10
+        m /= 10
+    }
+    for (i in list.indices) {
+        for (s in romdig.indices) if (list[i] == romdig[s]) str += roman[s]
+    }
+    return str
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -353,4 +380,65 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val digalp = mutableListOf(
+        "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять",
+        "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+        "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать",
+        "девятнадцать", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят",
+        "семьдесят", "восемьдесят", "девяносто", "сто", "двести", "триста", "четыреста",
+        "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот", "одна тысяча",
+        "две тысячи", "три тысячи", "четыре тысячи",
+    )
+    val digd = mutableListOf<Int>()
+    for (i in 1..9) digd.add(i)
+    for (i in 10..20) digd.add(i)
+    for (i in 30..90 step 10) digd.add(i)
+    for (i in 100..900 step 100) digd.add(i)
+    for (i in 1000..4000 step 1000) digd.add(i)
+    val list = mutableListOf<Int>()
+    var str = ""
+    var k = 1
+    var m = n
+    while (m != 0) {
+        if (m % 10 != 0) list.add(0, m % 10 * k)
+        k *= 10
+        m /= 10
+    }
+    k = 0
+    var l = 0
+    for (i in list.indices) {
+        if (i != 0 && (list[i] in 1000..9000 && list[i - 1] == 10000
+                    || list[i] in 1..9 && list[i - 1] == 10)
+        ) {
+            list[i] += list[i - 1]
+            if (list[i] in 10000..19000) k = 1
+            if (list[i] in 10..19) l = 1
+        }
+    }
+    if (k == 1) list.remove(10000)
+    if (l == 1) list.remove(10)
+    for (i in list.indices) {
+        if (list[i] <= 4000) {
+            for (s in digd.indices) {
+                if (list[i] == digd[s]) str += digalp[s]
+            }
+        }
+        if (list[i] >= 5000) {
+            for (s in digd.indices) {
+                if (list[i] / 1000 == digd[s] &&
+                    (list.size == 1
+                            || list.size != 1 && (i != 0 && i == list.size - 1
+                            || i != list.size - 1 && digitNumber(list[i + 1]) < 4)
+                            || list[0] >= 100000 && list[1] !in 10000..100000)
+                ) str += "${digalp[s]} тысяч"
+                else if (list[i] / 1000 == digd[s] && (i == 0
+                            || i != list.size - 1 && digitNumber(list[i + 1]) > 3)
+                ) str += digalp[s]
+            }
+        }
+        str += " "
+
+    }
+    return str.trim()
+}
