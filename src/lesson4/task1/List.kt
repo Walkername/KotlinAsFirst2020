@@ -430,10 +430,9 @@ fun russian(n: Int): String {
                     (list.size == 1
                             || list.size != 1 && (i != 0 && i == list.size - 1
                             || i != list.size - 1 && digitNumber(list[i + 1]) < 4)
-                            || list[0] >= 100000 && list[1] !in 10000..100000)
+                            )
                 ) str += "${digalp[s]} тысяч"
-                else if (list[i] / 1000 == digd[s] && (i == 0
-                            || i != list.size - 1 && digitNumber(list[i + 1]) > 3)
+                else if (list[i] / 1000 == digd[s] && i != list.size - 1 && digitNumber(list[i + 1]) > 3
                 ) str += digalp[s]
             }
         }
