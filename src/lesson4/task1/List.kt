@@ -4,7 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import lesson3.task1.digitNumber
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -276,17 +275,10 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val alphabet = mutableListOf<Char>()
-    for (i in 'a'..'z') {
-        alphabet.add(i)
-    }
+    for (i in 'a'..'z') alphabet.add(i)
     val list = convert(n, base).toMutableList()
     var listcts = ""
-    for (i in 0 until list.size) {
-        listcts += if (list[i] > 9) {
-            alphabet[list[i] - 10]
-        } else
-            list[i]
-    }
+    for (i in 0 until list.size) listcts += if (list[i] > 9) alphabet[list[i] - 10] else list[i]
     return listcts
 }
 
@@ -321,20 +313,12 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val numalp = mutableListOf<Char>()
-    for (i in '0'..'9') {
-        numalp.add(i)
-    }
-    for (i in 'a'..'z') {
-        numalp.add(i)
-    }
+    val numAlp = mutableListOf<Char>()
+    for (i in '0'..'9') numAlp.add(i)
+    for (i in 'a'..'z') numAlp.add(i)
     val list = str.toMutableList()
     val lst = mutableListOf<Int>()
-    for (i in list.indices) {
-        for (s in numalp.indices) {
-            if (list[i] == numalp[s]) lst.add(s)
-        }
-    }
+    for (i in list.indices) for (s in numAlp.indices) if (list[i] == numAlp[s]) lst.add(s)
     return decimal(lst, base)
 }
 
@@ -353,11 +337,11 @@ fun roman(n: Int): String {
         "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C", "CC", "CCC", "CD", "D",
         "DC", "DCC", "DCCC", "CM", "M", "MM", "MMM"
     )
-    val romdig = mutableListOf<Int>()
-    for (i in 1..9) romdig.add(i)
-    for (i in 10..90 step 10) romdig.add(i)
-    for (i in 100..900 step 100) romdig.add(i)
-    for (i in 1000..3000 step 1000) romdig.add(i)
+    val romIndex = mutableListOf<Int>()
+    for (i in 1..9) romIndex.add(i)
+    for (i in 10..90 step 10) romIndex.add(i)
+    for (i in 100..900 step 100) romIndex.add(i)
+    for (i in 1000..3000 step 1000) romIndex.add(i)
     val list = mutableListOf<Int>()
     var str = ""
     var k = 1
@@ -367,9 +351,7 @@ fun roman(n: Int): String {
         k *= 10
         m /= 10
     }
-    for (i in list.indices) {
-        for (s in romdig.indices) if (list[i] == romdig[s]) str += roman[s]
-    }
+    for (element in list) for (s in romIndex.indices) if (element == romIndex[s]) str += roman[s]
     return str
 }
 
@@ -382,7 +364,7 @@ fun roman(n: Int): String {
  */
 fun russian(n: Int): String {
     val digalp = mutableListOf(
-        "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять",
+        "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять",
         "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
         "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать",
         "девятнадцать", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят",
@@ -391,8 +373,7 @@ fun russian(n: Int): String {
         "две тысячи", "три тысячи", "четыре тысячи",
     )
     val digd = mutableListOf<Int>()
-    for (i in 1..9) digd.add(i)
-    for (i in 10..20) digd.add(i)
+    for (i in 0..20) digd.add(i)
     for (i in 30..90 step 10) digd.add(i)
     for (i in 100..900 step 100) digd.add(i)
     for (i in 1000..4000 step 1000) digd.add(i)
@@ -405,39 +386,21 @@ fun russian(n: Int): String {
         k *= 10
         m /= 10
     }
-    k = 0
     var l = 0
-    for (i in list.indices) {
-        if (i != 0 && (list[i] in 1000..9000 && list[i - 1] == 10000
-                    || list[i] in 1..9 && list[i - 1] == 10)
-        ) {
+    for (i in 1 until list.size)
+        if (list[i] in 1000..9000 && list[i - 1] == 10000 || list[i] in 1..9 && list[i - 1] == 10) {
             list[i] += list[i - 1]
-            if (list[i] in 10000..19000) k = 1
-            if (list[i] in 10..19) l = 1
+            if (list[i] in 10000..19000) k = list[i - 1]
+            if (list[i] in 10..19) l = list[i - 1]
         }
-    }
-    if (k == 1) list.remove(10000)
-    if (l == 1) list.remove(10)
+    list.remove(k) and list.remove(l)
     for (i in list.indices) {
-        if (list[i] <= 4000) {
-            for (s in digd.indices) {
-                if (list[i] == digd[s]) str += digalp[s]
-            }
-        }
-        if (list[i] >= 5000) {
-            for (s in digd.indices) {
-                if (list[i] / 1000 == digd[s] &&
-                    (list.size == 1
-                            || list.size != 1 && (i != 0 && i == list.size - 1
-                            || i != list.size - 1 && digitNumber(list[i + 1]) < 4)
-                            )
-                ) str += "${digalp[s]} тысяч"
-                else if (list[i] / 1000 == digd[s] && i != list.size - 1 && digitNumber(list[i + 1]) > 3
-                ) str += digalp[s]
-            }
+        for (s in digd.indices) {
+            if (list[i] <= 4000 && list[i] == digd[s]) str += digalp[s]
+            if (list[i] >= 5000 && list[i] / 1000 == digd[s]) if (i == list.size - 1 || list[i + 1] < 1000) str += "${digalp[s]} тысяч"
+            else if (list[i + 1] > 999) str += digalp[s]
         }
         str += " "
-
     }
     return str.trim()
 }
