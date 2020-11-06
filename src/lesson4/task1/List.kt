@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import ru.spbstu.kotlin.typeclass.classes.Monoid.Companion.plus
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -274,11 +275,9 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val alphabet = mutableListOf<Char>()
-    for (i in 'a'..'z') alphabet.add(i)
     val list = convert(n, base).toMutableList()
     var listcts = ""
-    for (i in 0 until list.size) listcts += if (list[i] > 9) alphabet[list[i] - 10] else list[i]
+    for (i in list.indices) listcts += if (list[i] > 9) 'a' + list[i] - 10 else list[i]
     return listcts
 }
 
@@ -313,12 +312,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val numAlp = mutableListOf<Char>()
-    for (i in '0'..'9') numAlp.add(i)
-    for (i in 'a'..'z') numAlp.add(i)
     val list = str.toMutableList()
     val lst = mutableListOf<Int>()
-    for (i in list.indices) for (s in numAlp.indices) if (list[i] == numAlp[s]) lst.add(s)
+    for (i in list.indices) if (list[i] > '9') lst.add(10 + (list[i] - 'a')) else lst.add(1 + (list[i] - '1'))
     return decimal(lst, base)
 }
 
@@ -337,21 +333,15 @@ fun roman(n: Int): String {
         "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C", "CC", "CCC", "CD", "D",
         "DC", "DCC", "DCCC", "CM", "M", "MM", "MMM"
     )
-    val romIndex = mutableListOf<Int>()
-    for (i in 1..9) romIndex.add(i)
-    for (i in 10..90 step 10) romIndex.add(i)
-    for (i in 100..900 step 100) romIndex.add(i)
-    for (i in 1000..3000 step 1000) romIndex.add(i)
     val list = mutableListOf<Int>()
     var str = ""
-    var k = 1
     var m = n
     while (m != 0) {
-        if (m % 10 != 0) list.add(0, m % 10 * k)
-        k *= 10
+        list.add(0, m % 10)
         m /= 10
     }
-    for (element in list) for (s in romIndex.indices) if (element == romIndex[s]) str += roman[s]
+    for (i in list.indices) if (list[i] != 0)
+        str += roman[list[i] * (list.size - i) + (9 - list[i]) * (list.size - i - 1) - 1]
     return str
 }
 
@@ -363,7 +353,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val digalp = mutableListOf(
+    val digalp = listOf(
         "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять",
         "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
         "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать",
