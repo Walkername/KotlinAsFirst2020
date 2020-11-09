@@ -172,6 +172,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val averagedCost = mutableMapOf<String, Double>()
     if (stockPrices.isEmpty()) return averagedCost
     for (stock in stockPrices.indices) {
+        var stockPr = stockPrices[stock].second
         var quantity = 1
         for (stock2 in stockPrices.indices) {
             if (stockPrices[stock].first == stockPrices[stock2].first && stock != stock2) {
@@ -181,7 +182,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         for (stock2 in stockPrices.indices) {
             if (stockPrices[stock].first == stockPrices[stock2].first && stock != stock2) {
                 averagedCost[stockPrices[stock].first] =
-                    (stockPrices[stock].second + stockPrices[stock2].second) / quantity
+                    (stockPr + stockPrices[stock2].second) / quantity
+                stockPr += stockPrices[stock2].second
             }
             if (quantity == 1) averagedCost[stockPrices[stock].first] = stockPrices[stock].second
         }
