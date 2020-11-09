@@ -41,16 +41,9 @@ fun filterByCountryCode(
     countryCode: String
 ) {
     val namesToRemove = mutableListOf<String>()
-
-    for ((name, phone) in phoneBook) {
-        if (!phone.startsWith(countryCode)) {
-            namesToRemove.add(name)
-        }
-    }
-
-    for (name in namesToRemove) {
-        phoneBook.remove(name)
-    }
+    for ((name, phone) in phoneBook)
+        if (!phone.startsWith(countryCode)) namesToRemove.add(name)
+    for (name in namesToRemove) phoneBook.remove(name)
 }
 
 /**
@@ -108,7 +101,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    var l = 0
+    for ((key) in a) if (a[key] == b[key]) l = 1
+    return l == 1
+}
 
 /**
  * Простая (2 балла)
@@ -125,7 +122,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+    val lots = mutableSetOf<String>()
+    for ((key) in b) if (b[key] == a[key]) lots += key
+    for (key in lots) a.remove(key)
 }
 
 /**
@@ -135,7 +134,11 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val common = mutableListOf<String>()
+    for (name in a) if (name in b && name !in common) common.add(name)
+    return common
+}
 
 /**
  * Средняя (3 балла)
@@ -158,7 +161,6 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
 
 /**
  * Средняя (4 балла)
- *
  * Для заданного списка пар "акция"-"стоимость" вернуть ассоциативный массив,
  * содержащий для каждой акции ее усредненную стоимость.
  *
@@ -166,7 +168,26 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val averagedCost = mutableMapOf<String, Double>()
+    if (stockPrices.isEmpty()) return averagedCost
+    for (stock in stockPrices.indices) {
+        var quantity = 1
+        for (stock2 in stockPrices.indices) {
+            if (stockPrices[stock].first == stockPrices[stock2].first && stock != stock2) {
+                quantity++
+            }
+        }
+        for (stock2 in stockPrices.indices) {
+            if (stockPrices[stock].first == stockPrices[stock2].first && stock != stock2) {
+                averagedCost[stockPrices[stock].first] =
+                    (stockPrices[stock].second + stockPrices[stock2].second) / quantity
+            }
+            if (quantity == 1) averagedCost[stockPrices[stock].first] = stockPrices[stock].second
+        }
+    }
+    return averagedCost
+}
 
 /**
  * Средняя (4 балла)
