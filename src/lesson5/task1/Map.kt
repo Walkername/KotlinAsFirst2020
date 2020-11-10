@@ -247,7 +247,17 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val map = mutableMapOf<String, Int>()
+    for (element in list) {
+        var numberRepeat = 0
+        if (element !in map) {
+            for (element2 in list) if (element == element2) numberRepeat++
+            if (numberRepeat > 1) map[element] = numberRepeat
+        }
+    }
+    return map
+}
 
 /**
  * Средняя (3 балла)
@@ -261,7 +271,24 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    var symbolNotBelong = 1
+    if (words.isEmpty()) return false
+    for (word in words.indices) {
+        var equalLength = 0
+        words[word].toLowerCase()
+        for (word2 in 1 until words.size) {
+            words[word2].toLowerCase()
+            if (words[word].length == words[word2].length) {
+                equalLength = 1
+                for (char in words[word]) if (char !in words[word2]) symbolNotBelong = 0
+            }
+            if (equalLength != 1) return false
+            if (symbolNotBelong == 1) return true
+        }
+    }
+    return symbolNotBelong == 1
+}
 
 /**
  * Сложная (5 баллов)
