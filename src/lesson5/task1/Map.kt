@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -102,9 +104,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var l = 0
-    for ((key) in a) if (a[key] == b[key]) l = 1
-    return l == 1
+    var affiliation = 0
+    if (a.isEmpty() && b.isEmpty()) return true
+    for ((key) in a) {
+        if (a[key] == b[key]) affiliation = 1
+    }
+    return affiliation == 1
 }
 
 /**
@@ -123,8 +128,10 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     val lots = mutableSetOf<String>()
-    for ((key) in b) if (b[key] == a[key]) lots += key
-    for (key in lots) a.remove(key)
+    for ((key) in b) {
+        if (b[key] == a[key]) lots += key
+    }
+    a.keys.removeAll(lots)
 }
 
 /**
@@ -134,11 +141,8 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val common = mutableListOf<String>()
-    for (name in a) if (name in b && name !in common) common.add(name)
-    return common
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
+
 
 /**
  * Средняя (3 балла)
@@ -229,11 +233,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (letter in chars) letter.toLowerCase()
-    for (char in word) if (char !in chars) return false
-    return true
-}
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = !word.toMutableList().retainAll(chars)
+
 
 /**
  * Средняя (4 балла)
@@ -272,22 +273,22 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    var symbolNotBelong = 1
+    var symbolBelong = 0
     if (words.isEmpty()) return false
     for (word in words.indices) {
-        var equalLength = 0
         words[word].toLowerCase()
-        for (word2 in 1 until words.size) {
+        for (word2 in words.indices) {
             words[word2].toLowerCase()
-            if (words[word].length == words[word2].length) {
-                equalLength = 1
-                for (char in words[word]) if (char !in words[word2]) symbolNotBelong = 0
+            if (word != word2 && words[word].length == words[word2].length) {
+                if (words[word].isEmpty() && words[word2].isEmpty()) return true
+                for (char in words[word]) {
+                    symbolBelong = if (char in words[word2]) 1 else 0
+                }
+                if (symbolBelong == 1) return true
             }
-            if (equalLength != 1) return false
-            if (symbolNotBelong == 1) return true
         }
     }
-    return symbolNotBelong == 1
+    return symbolBelong == 1
 }
 
 /**
@@ -343,7 +344,16 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var pair = Pair(-1, -1)
+    for (element in list.indices) {
+        if (number - list[element] in list && number - list[element] != list[element]) {
+            val indexOtherElement = list.indexOf(number - list[element])
+            pair = Pair(indexOtherElement, element).sorted()
+        }
+    }
+    return pair
+}
 
 /**
  * Очень сложная (8 баллов)
