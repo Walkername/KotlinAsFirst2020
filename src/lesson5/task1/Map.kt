@@ -233,7 +233,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = !word.toMutableList().retainAll(chars)
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+    !word.toLowerCase().toMutableList().retainAll(chars.map { it.toLowerCase() })
 
 
 /**
@@ -347,8 +348,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var pair = Pair(-1, -1)
     for (element in list.indices) {
-        if (number - list[element] in list && number - list[element] != list[element]) {
-            val indexOtherElement = list.indexOf(number - list[element])
+        val indexOtherElement = list.indexOf(number - list[element])
+        if (number - list[element] in list && element != indexOtherElement) {
             pair = Pair(indexOtherElement, element).sorted()
         }
     }
