@@ -107,6 +107,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     var affiliation = 0
     if (a.isEmpty() && b.isEmpty()) return true
     for ((key) in a) {
+        if (key.isEmpty() && key.isEmpty()) affiliation = 1
         if (a[key] == b[key]) affiliation = 1
     }
     return affiliation == 1
@@ -213,14 +214,16 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var minName = ""
     var minimal = Double.MAX_VALUE
+    var quantity = 0
     for ((name) in stuff) {
         if (stuff.getValue(name).first == kind)
             if (stuff.getValue(name).second <= minimal) {
                 minimal = stuff.getValue(name).second
                 minName = name
+                quantity++
             }
     }
-    if (minimal == Double.MAX_VALUE) return null
+    if (quantity == 0) return null
     return minName
 }
 

@@ -82,7 +82,7 @@ fun dateStrToDigit(str: String): String {
         "miss", "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
-    if (parts.size != 3) return ""
+    if (parts.size != 3 || parts[0].isEmpty() || parts[1].isEmpty() || parts[2].isEmpty()) return ""
     val day = parts[0].toInt()
     val numberMonth = months.indexOf(parts[1])
     val year = parts[2].toInt()
