@@ -82,13 +82,27 @@ fun dateStrToDigit(str: String): String {
         "miss", "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
-    if (parts.size != 3 || parts[0].isEmpty() || parts[1].isEmpty() || parts[2].isEmpty()) return ""
-    val day = parts[0].toInt()
-    val numberMonth = months.indexOf(parts[1])
-    val year = parts[2].toInt()
-    if (parts[1] !in months || parts.size != 3 || day > daysInMonth(numberMonth, year)) return ""
-    daysInMonth(numberMonth, year)
-    return String.format("%02d.%02d.%d", day, numberMonth, year)
+    if (parts.size != 3) return ""
+    var day = 0
+    var year = 0
+    var numberMonth = 0
+    try {
+        for (part in parts.indices) {
+            if (
+                parts.size == 3 && parts[1] in months
+                && months.indexOf(parts[1]) in 1..12
+                && parts[0].toInt() <= daysInMonth(months.indexOf(parts[1]), year)
+                && numberFormat(parts[0])
+            ) {
+                day = parts[0].toInt()
+                year = parts[2].toInt()
+                numberMonth = months.indexOf(parts[1])
+            } else return ""
+        }
+        return String.format("%02d.%02d.%d", day, numberMonth, year)
+} catch (e: NumberFormatException) {
+        return ""
+    }
 }
 
 /**
