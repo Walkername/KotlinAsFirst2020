@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +76,20 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    val months = listOf(
+        "miss", "января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря"
+    )
+    if (parts.size != 3) return ""
+    val day = parts[0].toInt()
+    val numberMonth = months.indexOf(parts[1])
+    val year = parts[2].toInt()
+    if (parts[1] !in months || parts.size != 3 || day > daysInMonth(numberMonth, year)) return ""
+    daysInMonth(numberMonth, year)
+    return String.format("%02d.%02d.%04d", day, numberMonth, year)
+}
 
 /**
  * Средняя (4 балла)
@@ -114,7 +129,25 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val parts = jumps.split(" ")
+    var max = 0
+    for (part in parts) {
+        if (part != "-" && part != "%" && !numberFormat(part)) return -1
+        if (numberFormat(part))
+            if (part.toInt() > max) max = part.toInt()
+    }
+    return if (max == 0) -1 else max
+}
+
+fun numberFormat(str: String): Boolean {
+    return try {
+        str.toInt()
+        true
+    } catch (e: java.lang.NumberFormatException) {
+        false
+    }
+}
 
 /**
  * Сложная (6 баллов)
