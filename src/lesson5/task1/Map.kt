@@ -105,7 +105,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     var affiliation = 0
-    if (a.isEmpty() && b.isEmpty() || a.isEmpty() && b.containsValue("")) return true
+    if (a.isEmpty()) return true
     for ((key) in a) {
         if (a[key] == b[key]) affiliation = 1
     }
