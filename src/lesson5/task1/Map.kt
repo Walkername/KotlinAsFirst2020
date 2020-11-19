@@ -106,9 +106,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     var affiliation = 0
     if (a.isEmpty() && b.isEmpty()) return true
-    for ((key) in a) {
-        if (key.isEmpty() && key.isEmpty()) affiliation = 1
-        if (a[key] == b[key]) affiliation = 1
+    val one = if (a.isEmpty()) b else a
+    val other = if (a.isEmpty()) a else b
+    for ((key) in one) {
+        if (one[key] == b[key] || one[key] == "" && other.isEmpty()) affiliation = 1
     }
     return affiliation == 1
 }
@@ -277,22 +278,17 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    var symbolBelong = 0
+    var affiliation = 0
     if (words.isEmpty()) return false
     for (word in words.indices) {
-        words[word].toLowerCase()
-        for (word2 in words.indices) {
-            words[word2].toLowerCase()
-            if (word != word2 && words[word].length == words[word2].length) {
-                if (words[word].isEmpty() && words[word2].isEmpty()) return true
-                for (char in words[word]) {
-                    symbolBelong = if (char in words[word2]) 1 else 0
-                }
-                if (symbolBelong == 1) return true
-            }
-        }
+        for (word2 in words.indices)
+            if (
+                word != word2 && words[word].length == words[word2].length &&
+                canBuildFrom(words[word2].toLowerCase().toMutableList(), words[word].toLowerCase())
+            )
+                affiliation = 1
     }
-    return symbolBelong == 1
+    return affiliation == 1
 }
 
 /**
