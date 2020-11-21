@@ -104,10 +104,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var affiliation = 0
+    var affiliation = 1
     if (a.isEmpty()) return true
     for ((key) in a) {
-        if (a[key] == b[key]) affiliation = 1
+        if (a[key] != b[key] || a.getValue(key).isEmpty()) affiliation = 0
     }
     return affiliation == 1
 }
