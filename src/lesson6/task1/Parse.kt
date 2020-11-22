@@ -80,6 +80,7 @@ val months = listOf(
     "miss", "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря"
 )
+
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
     if (parts.size != 3) return ""
@@ -175,7 +176,23 @@ fun numberFormat(str: String): Boolean {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val parts = jumps.split(" ")
+    var max = 0
+    for (i in parts.indices) {
+        if (numberFormat(parts[i])) {
+            val partInt = parts[i].toInt()
+            if (partInt > max && parts[i + 1] == "+") max = partInt
+        } else {
+            val subparts = parts[i].toMutableList()
+            for (part in subparts) {
+                if (part != '+' && part != '%' && part != '-') return -1
+            }
+        }
+    }
+    return if (max == 0) -1 else max
+}
+
 
 /**
  * Сложная (6 баллов)
