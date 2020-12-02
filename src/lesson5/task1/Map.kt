@@ -21,7 +21,6 @@ fun shoppingListCost(
     costs: Map<String, Double>
 ): Double {
     var totalCost = 0.0
-
     for (item in shoppingList) {
         val itemCost = costs[item]
         if (itemCost != null) {
@@ -173,21 +172,16 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     val averagedCost = mutableMapOf<String, Double>()
-    if (stockPrices.isEmpty()) return averagedCost
-    val setStocks = mutableSetOf<String>()
-    for ((stock) in stockPrices) {
-        setStocks.add(stock)
+    val counterList = mutableListOf<String>()
+    for ((element) in stockPrices) {
+        counterList.add(element)
     }
-    for (stock in setStocks) {
-        var quantity = 0
-        var sumCost = 0.0
-        for ((stockPr, cost) in stockPrices) {
-            if (stock == stockPr) {
-                quantity++
-                sumCost += cost
-            }
-        }
-        averagedCost[stock] = sumCost / quantity
+    if (stockPrices.isEmpty()) return averagedCost
+    for ((stock, cost) in stockPrices) {
+        val counter = counterList.filter { it == stock }.size
+        val averCst = if (!averagedCost.contains(stock)) 0.0 else averagedCost[stock]
+        val costs = averCst!! + cost / counter
+        averagedCost[stock] = costs
     }
     return averagedCost
 }
@@ -277,16 +271,14 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     var affiliation = 0
-    if (words.isEmpty()) return false
-    for (word in words.indices) {
-        for (word2 in words.indices)
-            if (
-                word != word2 && words[word].length == words[word2].length &&
-                canBuildFrom(words[word2].toLowerCase().toMutableList(), words[word].toLowerCase())
-            )
-                affiliation = 1
+    val setWords = mutableSetOf<String>()
+    setWords.addAll(words)
+    if (setWords.size < words.size) return true
+    for (element in setWords) {
+        if (setWords.any { it.length == element.length && canBuildFrom(it.toList(), element) && it != element })
+            affiliation = 1
     }
-    return affiliation == 1
+    return (affiliation == 1)
 }
 
 /**
