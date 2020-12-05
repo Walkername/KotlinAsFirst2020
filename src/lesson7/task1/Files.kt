@@ -66,12 +66,8 @@ fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     File(inputName).forEachLine { line ->
         if (!line.startsWith("_")) {
-            if (line.isEmpty()) {
-                writer.newLine()
-                writer.newLine()
-            }
             writer.write(line)
-            if (line.endsWith('\n')) writer.newLine()
+            if (line.endsWith("")) writer.write("\n")
         }
     }
     writer.close()
@@ -86,7 +82,27 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val mapStrings = mutableMapOf<String, Int>()
+    for (string in substrings) {
+        mapStrings[string] = 0
+    }
+    println(mapStrings)
+    for ((string) in mapStrings) {
+        for (word in File(inputName).readText().split(" ")) {
+            if (string.length == 1) for (char in word) {
+                if (string.toLowerCase() in char.toString().toLowerCase()) {
+                    val strNumb = mapStrings[string]!! + 1
+                    mapStrings[string] = strNumb
+                }
+            } else if (string.toLowerCase() in word.toLowerCase()) {
+                val strNumb = mapStrings[string]!! + 1
+                mapStrings[string] = strNumb
+            }
+        }
+    }
+    return mapStrings
+}
 
 
 /**
