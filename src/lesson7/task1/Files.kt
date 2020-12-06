@@ -66,7 +66,7 @@ fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     File(inputName).forEachLine { line ->
         if (!line.startsWith("_")) {
-            writer.write("$line\n")
+            writer.write(line)
             writer.write("\n")
         }
     }
@@ -242,21 +242,19 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    val setMax = mutableSetOf<String>()
+    val listMax = mutableListOf<String>()
     var max = "0"
-    var index = 0
     for (word in File(inputName).readText().split(Regex("\\s+"))) {
         if (word.toLowerCase().toSet().size == word.length && word.length >= max.length) {
             max = word
-            setMax.add(word)
+            listMax.add(word)
         }
     }
-    println(setMax)
-    for (word in setMax) {
-        if (index < setMax.size - 1) {
-            index++
-            writer.write("$word, ")
-        } else if (index == setMax.size - 1) writer.write(word)
+    println(listMax)
+    for (index in listMax.indices) {
+        if (index < listMax.size - 1) {
+            writer.write("${listMax[index]}, ")
+        } else if (index == listMax.size - 1) writer.write(listMax[index])
     }
     writer.close()
 }
