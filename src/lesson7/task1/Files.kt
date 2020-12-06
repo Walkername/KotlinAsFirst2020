@@ -66,8 +66,8 @@ fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     File(inputName).forEachLine { line ->
         if (!line.startsWith("_")) {
-            writer.write(line)
-            if (line.endsWith("")) writer.write("\n")
+            writer.write("$line\n")
+            writer.write("\n")
         }
     }
     writer.close()
@@ -83,27 +83,8 @@ fun deleteMarked(inputName: String, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val mapStrings = mutableMapOf<String, Int>()
-    for (string in substrings) {
-        mapStrings[string] = 0
-    }
-    println(mapStrings)
-    for ((string) in mapStrings) {
-        for (word in File(inputName).readText().split(" ")) {
-            if (string.length == 1) for (char in word) {
-                if (string.toLowerCase() in char.toString().toLowerCase()) {
-                    val strNumb = mapStrings[string]!! + 1
-                    mapStrings[string] = strNumb
-                }
-            } else if (string.toLowerCase() in word.toLowerCase()) {
-                val strNumb = mapStrings[string]!! + 1
-                mapStrings[string] = strNumb
-            }
-        }
-    }
-    return mapStrings
+    TODO()
 }
-
 
 /**
  * Средняя (12 баллов)
@@ -260,7 +241,24 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val setMax = mutableSetOf<String>()
+    var max = "0"
+    var index = 0
+    for (word in File(inputName).readText().split(Regex("\\s+"))) {
+        if (word.toLowerCase().toSet().size == word.length && word.length >= max.length) {
+            max = word
+            setMax.add(word)
+        }
+    }
+    println(setMax)
+    for (word in setMax) {
+        if (index < setMax.size - 1) {
+            index++
+            writer.write("$word, ")
+        } else if (index == setMax.size - 1) writer.write(word)
+    }
+    writer.close()
 }
 
 /**
