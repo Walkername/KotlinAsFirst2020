@@ -250,8 +250,8 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             listMax.add(word)
         }
     }
-    println(listMax)
-    for (index in listMax.indices) {
+
+    for (index in listMax.indices.filter { listMax[it].length == max.length }) {
         if (index < listMax.size - 1) {
             writer.write("${listMax[index]}, ")
         } else if (index == listMax.size - 1) writer.write(listMax[index])
