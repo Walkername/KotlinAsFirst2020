@@ -121,7 +121,24 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var maxLine = 0
+    File(inputName).forEachLine { line ->
+        if (line.length > maxLine) maxLine = line.length
+    }
+    File(inputName).forEachLine { line ->
+        var numberSpace = 0
+        for (element in line) {
+            if (element == ' ') numberSpace++ else break
+        }
+        if (numberSpace % 2 != 0) numberSpace++
+        for (i in 1..((maxLine - line.length - numberSpace) / 2)) {
+            writer.write(" ")
+        }
+        writer.write(line)
+        writer.write("\n")
+    }
+    writer.close()
 }
 
 /**
@@ -250,12 +267,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             listMax.add(word)
         }
     }
-
-    for (index in listMax.indices.filter { listMax[it].length == max.length }) {
-        if (index < listMax.size - 1) {
-            writer.write("${listMax[index]}, ")
-        } else if (index == listMax.size - 1) writer.write(listMax[index])
-    }
+    writer.write(listMax.filter { it.length == max.length }.joinToString())
     writer.close()
 }
 
