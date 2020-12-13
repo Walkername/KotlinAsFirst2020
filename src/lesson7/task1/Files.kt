@@ -129,10 +129,7 @@ fun centerFile(inputName: String, outputName: String) {
     File(inputName).forEachLine { line ->
         var numberSpace = 0
         for (element in line) {
-            if (element == ' ') {
-                println(1)
-                numberSpace++
-            } else break
+            if (element == ' ') numberSpace++ else break
         }
         if (numberSpace % 2 != 0) numberSpace++
         for (i in 1..(maxLine / 2 - line.length / 2 - numberSpace / 2)) {
