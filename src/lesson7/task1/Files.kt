@@ -126,8 +126,10 @@ fun centerFile(inputName: String, outputName: String) {
     File(inputName).forEachLine { line ->
         if (line.length > maxLine) maxLine = line.trim().length
     }
+    println(maxLine)
     File(inputName).forEachLine { line ->
-        for (i in 1..(maxLine / 2 - line.trim().length / 2)) {
+        println(line.trim().length / 2)
+        for (i in 1..((maxLine - line.trim().length) / 2)) {
             writer.write(" ")
         }
         writer.write(line.trim())
