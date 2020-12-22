@@ -2,7 +2,9 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import java.io.File
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -126,9 +128,7 @@ fun centerFile(inputName: String, outputName: String) {
     File(inputName).forEachLine { line ->
         if (line.length > maxLine) maxLine = line.trim().length
     }
-    println(maxLine)
     File(inputName).forEachLine { line ->
-        println(line.trim().length / 2)
         for (i in 1..((maxLine - line.trim().length) / 2)) {
             writer.write(" ")
         }
@@ -481,6 +481,61 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    writer.write(" $lhv")
+    writer.write(" | ")
+    writer.write("$rhv")
+    var number = lhv
+    while (digitNumber(number) > 1) {
+        var dividend = 0
+        var degree = digitNumber(rhv)
+        while (dividend / rhv == 0) {
+            dividend = lhv / 10.0.pow(digitNumber(lhv) - degree).toInt()
+            degree++
+        }
+        number %= 10.0.pow(degree).toInt()
+        println(dividend)
+        writer.write("\n")
+
+    }
+    writer.close()
 }
 
+
+
+fun maze(outputName: String, commands: String): Pair<Int, Int> { // координаты: номер строки и номер позиции в строке,
+    val listOfLines = mutableListOf<String>()                    // считая, что номер первой строки и номер первого символа в строке - 1
+    var numberLine = -1
+    var numberInLine = 0
+    var affiliation = false
+    File(outputName).forEachLine { line ->          // поиск первоначального положения робота
+        listOfLines.add(line)                       // помещаю все строки в один список, чтобы в дальнейшем знать
+        if (!line.contains('*') && !affiliation) {  // номер строки и вызывать строку, на которой находится робот
+            numberLine++
+            affiliation = true
+        }
+        for (index in line.indices) {               // поиск позиции "звёздочки" в строке
+            if (line[index] == '*') {
+                numberInLine = index
+                break
+            }
+        }
+    }                                               // поиск первоначального положения окончен
+    for (action in commands) { // начало выполнения команд
+        when (action) {        // проверка на доступность каждого последующего хода
+            'r' -> {
+                if (listOfLines[numberLine][numberInLine + 1] == '.') numberInLine++
+            }
+            'l' -> {
+                if (listOfLines[numberLine][numberInLine - 1] == '.') numberInLine--
+            }
+            'u' -> {
+                if (numberLine != 0 && listOfLines[numberLine - 1][numberInLine] == '.') numberLine--
+            }
+            'd' -> {
+                if (numberLine != listOfLines.size && listOfLines[numberLine + 1][numberInLine] == '.') numberLine++
+            }
+        }
+    }
+    return Pair(numberLine + 1, numberInLine + 1)
+}
