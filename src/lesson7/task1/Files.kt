@@ -506,36 +506,35 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 fun maze(outputName: String, commands: String): Pair<Int, Int> { // координаты: номер строки и номер позиции в строке,
     val listOfLines = mutableListOf<String>()                    // считая, что номер первой строки и номер первого символа в строке - 1
     var numberLine = -1
-    var numberInLine = 0
-    var affiliation = false
+    var posInLine = -1
+    var numberRobots = 0
     File(outputName).forEachLine { line ->          // поиск первоначального положения робота
         listOfLines.add(line)                       // помещаю все строки в один список, чтобы в дальнейшем знать
-        if (!line.contains('*') && !affiliation) {  // номер строки и вызывать строку, на которой находится робот
-            numberLine++
-            affiliation = true
-        }
+        if (numberRobots == 0) numberLine++         // номер строки и вызывать строку, на которой находится робот
+        if (line.contains('*')) numberRobots++      // UPD: поиск позволяет понять робот один или их больше
         for (index in line.indices) {               // поиск позиции "звёздочки" в строке
             if (line[index] == '*') {
-                numberInLine = index
+                posInLine = index
                 break
             }
         }
     }                                               // поиск первоначального положения окончен
+    if (numberRobots != 1) return Pair(-1, -1) // при отсутствии робота, или если робот не один, возвращается пара (-1, -1)
     for (action in commands) { // начало выполнения команд
         when (action) {        // проверка на доступность каждого последующего хода
             'r' -> {
-                if (listOfLines[numberLine][numberInLine + 1] == '.') numberInLine++
+                if (posInLine != listOfLines[numberLine].length - 1 && listOfLines[numberLine][posInLine + 1] != '#') posInLine++
             }
             'l' -> {
-                if (listOfLines[numberLine][numberInLine - 1] == '.') numberInLine--
+                if (posInLine != 0 && listOfLines[numberLine][posInLine - 1] != '#') posInLine--
             }
             'u' -> {
-                if (numberLine != 0 && listOfLines[numberLine - 1][numberInLine] == '.') numberLine--
+                if (numberLine != 0 && listOfLines[numberLine - 1][posInLine] != '#') numberLine--
             }
             'd' -> {
-                if (numberLine != listOfLines.size && listOfLines[numberLine + 1][numberInLine] == '.') numberLine++
+                if (numberLine != listOfLines.size - 1 && listOfLines[numberLine + 1][posInLine] != '#') numberLine++
             }
         }
     }
-    return Pair(numberLine + 1, numberInLine + 1)
+    return Pair(numberLine + 1, posInLine + 1)
 }
